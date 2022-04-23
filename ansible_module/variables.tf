@@ -16,4 +16,6 @@ variable "public_subnets_id" {
 
 variable "ansible_key" {}
 
+variable "iam_role" {}
+
 variable "my_ip" {}

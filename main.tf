@@ -11,10 +11,10 @@ module "ansible_server" {
   ansible_instance_type = "t2.micro"
   ansible_volumes_type = "gp2"
   ansible_root_disk_size = "10"
-  ansible_ami = "ami-04505e74c0741db8d"
+  ansible_ami = "ami-0c4f7023847b90238"
   ansible_key = aws_key_pair.ec2_key.key_name
   vpc_id = module.kandula_vpc.vpc_id
   public_subnets_id = module.kandula_vpc.public_subnets_id
   my_ip = ["${chomp(data.http.myip.body)}/32"]
-
+  iam_role = aws_iam_instance_profile.ansible_server_ec2_fullaccess.name
 }

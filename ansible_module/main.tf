@@ -5,10 +5,8 @@ resource "aws_instance" "ansible_server" {
   subnet_id = var.public_subnets_id[0]
   associate_public_ip_address = true
   vpc_security_group_ids = [aws_security_group.ansible_server_access.id]
-  user_data = <<EOF
-  #!/bin/bash
-  sudo apt update && sudo apt install ansible -y
-  EOF
+  iam_instance_profile = var.iam_role
+  user_data = file("ansible_module/ansible_server_userdata.tpl")
   
   root_block_device {
     encrypted = false
