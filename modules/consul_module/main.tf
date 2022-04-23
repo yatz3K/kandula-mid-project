@@ -3,7 +3,7 @@ resource "aws_instance" "consul_server" {
     ami = var.consul_ami
     instance_type = var.consul_instance_type
     key_name = var.consul_key
-    subnet_id = var.public_subnets_id[count.index]
+    subnet_id = element(var.public_subnets_id, count.index)
     associate_public_ip_address = true
     vpc_security_group_ids = [aws_security_group.consul_server_access.id]
     iam_instance_profile = var.iam_role
@@ -36,7 +36,7 @@ resource "aws_security_group_rule" "consul_ssh_access" {
     protocol = "tcp"
     security_group_id = aws_security_group.consul_server_access.id
     type = "ingress"
-    source_security_group_id = module.ansible_server.security_group_id.id
+    source_security_group_id = var.ansible_security_group
 }
 
 resource "aws_security_group_rule" "consul_UI_access" {

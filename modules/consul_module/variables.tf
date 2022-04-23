@@ -10,9 +10,7 @@ variable "vpc_id" {
   type = string
 }
 
-variable "public_subnets_id" {
-  type = list(string)
-}
+variable "public_subnets_id" {}
 
 variable "consul_key" {}
 
@@ -23,3 +21,5 @@ variable "my_ip" {}
 variable "num_consul_server" {
   default = 3
 }
+
+variable "ansible_security_group" {}
