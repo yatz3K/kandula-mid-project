@@ -5,3 +5,16 @@ module "kandula_vpc" {
   public_subnet_list = ["192.168.100.0/24", "192.168.200.0/24"]
   aws_availability_zones = slice(data.aws_availability_zones.available.*.names[0], 0, 2)
 }
+
+module "ansible_server" {
+  source = "./ansible_module"
+  ansible_instance_type = "t2.micro"
+  ansible_volumes_type = "gp2"
+  ansible_root_disk_size = "10"
+  ansible_ami = "ami-04505e74c0741db8d"
+  ansible_key = aws_key_pair.ec2_key.key_name
+  vpc_id = module.kandula_vpc.vpc_id
+  public_subnets_id = module.kandula_vpc.public_subnets_id
+  my_ip = ["${chomp(data.http.myip.body)}/32"]
+
+}

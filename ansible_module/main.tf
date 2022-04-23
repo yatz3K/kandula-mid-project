@@ -1,10 +1,14 @@
 resource "aws_instance" "ansible_server" {
+  ami = var.ansible_ami
   instance_type = var.ansible_instance_type
-  key_name = ""
-  subnet_id = module.vpc_module.public_subnets_id[0]
+  key_name = var.ansible_key
+  subnet_id = var.public_subnets_id[0]
   associate_public_ip_address = true
-  vpc_security_group_ids = ""
-  user_data = ""
+  vpc_security_group_ids = [aws_security_group.ansible_server_access.id]
+  user_data = <<EOF
+  #!/bin/bash
+  sudo apt update && sudo apt install ansible -y
+  EOF
   
   root_block_device {
     encrypted = false
@@ -13,16 +17,16 @@ resource "aws_instance" "ansible_server" {
   }
 
  tags = {
-     "Name" = "kandula_ansible_server-${regex(".$", data.aws_availability_zones.available.names[count.index])}"
+     "Name" = "kandula_ansible_server"
  }
 }
 
 resource "aws_security_group" "ansible_server_access" {
-  vpc_id = module.vpc_module.vpc_id
+  vpc_id = var.vpc_id
   name = "ansible access"
 
   tags = {
-      "Name" = "ansible-access-${moudle.vpc_module.vpc_id}"
+      "Name" = "ansible-access-${var.vpc_id}"
   }
 }
 
@@ -33,5 +37,16 @@ resource "aws_security_group_rule" "ansible_ssh_access" {
     protocol = "tcp"
     security_group_id = aws_security_group.ansible_server_access.id
     type = "ingress"
-    cidr_blocks = ["${chomp(var.http.myip.body)}/32"]
+    cidr_blocks = var.my_ip
+}
+
+resource "aws_security_group_rule" "outbound_anywhere" {
+  description = "allow outbound traffic to anywhere"
+  from_port = 0
+  to_port = 0
+  protocol = "-1"
+  security_group_id = aws_security_group.ansible_server_access.id
+  type = "egress"
+  cidr_blocks = ["0.0.0.0/0"]
+  
 }
