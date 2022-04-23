@@ -6,7 +6,7 @@ resource "aws_instance" "ansible_server" {
   associate_public_ip_address = true
   vpc_security_group_ids = [aws_security_group.ansible_server_access.id]
   iam_instance_profile = var.iam_role
-  user_data = file("ansible_module/ansible_server_userdata.tpl")
+  user_data = file("modules/ansible_module/ansible_server_userdata.tpl")
   
   root_block_device {
     encrypted = false
