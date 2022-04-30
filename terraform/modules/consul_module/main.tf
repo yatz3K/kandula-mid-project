@@ -17,6 +17,7 @@ resource "aws_instance" "consul_server" {
 
  tags = {
      "Name" = "kandula_consul_server-${count.index+1}"
+     "Purpose" = var.Purpose
  }
 }
 

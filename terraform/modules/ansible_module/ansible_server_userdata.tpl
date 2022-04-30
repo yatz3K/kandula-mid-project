@@ -8,5 +8,6 @@ sudo apt-get-install git -y
 sudo apt-get install python3 -y
 sudo apt-get install python3-pip -y
 sudo pip3 install boto3
-mkdir -p /home/ubuntu/ansible
- 
+ansible-galaxy collection install amazon.aws
+git clone https://github.com/yatz3K/kandula-mid-project.git
+sudo cp -r /home/ubuntu/kandula-mid-project/ansible/ /home/ubuntu/
