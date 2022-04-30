@@ -10,5 +10,5 @@ resource "aws_key_pair" "ec2_key" {
 
 resource "local_file" "ec2_key" {
   sensitive_content  = tls_private_key.ec2_key.private_key_pem
-  filename           = "ec2_key_kandula.pem"
+  filename           = var.private_key_file_name
 }

@@ -14,6 +14,16 @@ resource "aws_instance" "ansible_server" {
     volume_size = var.ansible_root_disk_size
   }
 
+  provisioner "file" {
+    source     = var.private_key_file_name
+    destination = "/home/ubuntu/.ssh/id_rsa"
+    connection {   
+      host        = self.public_ip
+      user        = "ubuntu"
+      private_key = file(var.private_key_file_name)      
+    }   
+  }
+
  tags = {
      "Name" = "kandula_ansible_server"
  }

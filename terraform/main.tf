@@ -13,10 +13,12 @@ module "ansible_server" {
   ansible_root_disk_size = var.root_block_device_size
   ansible_ami = var.ubuntu-ami
   ansible_key = aws_key_pair.ec2_key.key_name
+  private_key_file_name = var.private_key_file_name
   vpc_id = module.kandula_vpc.vpc_id
   public_subnets_id = module.kandula_vpc.public_subnets_id
   my_ip = ["${chomp(data.http.myip.body)}/32"]
   iam_role = aws_iam_instance_profile.ansible_server_ec2_fullaccess.name
+  depends_on = [local_file.ec2_key, module.kandula_vpc]
 }
 
 module "consul_server" {

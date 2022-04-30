@@ -19,3 +19,5 @@ variable "ansible_key" {}
 variable "iam_role" {}
 
 variable "my_ip" {}
+
+variable "private_key_file_name" {}
