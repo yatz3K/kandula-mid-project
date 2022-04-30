@@ -23,3 +23,8 @@ variable "num_consul_server" {
 }
 
 variable "ansible_security_group" {}
+
+variable "Purpose" {
+  type = string
+  default = "Consul"
+}
