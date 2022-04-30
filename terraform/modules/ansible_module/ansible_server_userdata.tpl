@@ -13,4 +13,3 @@ chmod 400 /home/ubuntu/.ssh/id_rsa
 cat /home/ubuntu/.ssh/authorized_keys >> /home/ubuntu/.ssh/id_rsa.pub
 mkdir -p /home/ubuntu/ansible
 git clone https://github.com/yatz3K/kandula-mid-project.git /home/ubuntu/ansible
-#sudo cp -r /home/ubuntu/kandula-mid-project/ansible/ /home/ubuntu/
