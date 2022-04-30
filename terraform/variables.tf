@@ -26,3 +26,8 @@ variable "root_block_device_size" {
 variable "num_consul_server" {
   default = 3
 }
+
+variable "private_key_file_name" {
+  type = string
+  default = "ec2_key_kandula.pem"
+}

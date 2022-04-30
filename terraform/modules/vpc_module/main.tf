@@ -16,7 +16,7 @@ resource "aws_subnet" "public" {
   availability_zone       = var.aws_availability_zones[count.index]
 
   tags = {
-    "Name" = "Public_subnet_kandula_${regex(".$", var.aws_availability_zones[count.index])}_${aws_vpc.kandula_vpc.id}"
+    "Name" = "Public_subnet_kandula_${var.aws_availability_zones[count.index]}"
   }
 }
 
@@ -29,7 +29,7 @@ resource "aws_subnet" "private" {
   availability_zone       = var.aws_availability_zones[count.index]
 
   tags = {
-    "Name" = "Private_subnet_kandula_${regex(".$", var.aws_availability_zones[count.index])}_${aws_vpc.kandula_vpc.id}"
+    "Name" = "Private_subnet_kandula_${var.aws_availability_zones[count.index]}"
   }
 }
 
@@ -47,7 +47,7 @@ resource "aws_eip" "eip" {
   count = length(var.public_subnet_list)
 
   tags = {
-    "Name" = "kandula_NAT_elastic_ip_${regex(".$", var.aws_availability_zones[count.index])}_${aws_vpc.kandula_vpc.id}"
+    "Name" = "kandula_NAT_elastic_ip_${var.aws_availability_zones[count.index]}"
   }
 }
 
@@ -58,7 +58,7 @@ resource "aws_nat_gateway" "nat" {
   subnet_id     = aws_subnet.public.*.id[count.index]
 
   tags = {
-    "Name" = "kandula_NAT_${regex(".$", var.aws_availability_zones[count.index])}_${aws_vpc.kandula_vpc.id}"
+    "Name" = "kandula_NAT_${var.aws_availability_zones[count.index]}"
   }
 }
 
