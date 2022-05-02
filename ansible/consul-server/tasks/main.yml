@@ -1,0 +1,84 @@
+---
+# tasks file for consul-server
+- name: Crete Consul user and group
+  user:
+    name: "{{ consul_user }}"
+    state: present
+- name: Installing required packages 
+  apt: 
+    name: unzip
+    state: latest
+    update-cache: yes
+- name: Configuring resolved.conf
+  copy:
+    src: resolved.conf
+    dest: /etc/systemd
+- name: Restart systemd-resolved service
+  service:
+    name: systemd-resolved.service
+    state: restarted
+- name: Downloading Consul
+  get_url:
+    url: https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_amd64.zip
+    dest: /tmp
+- name: unzip consul
+  unarchive:
+    src: /tmp/consul_{{ consul_version }}_linux_amd64.zip
+    dest: /usr/local/bin
+    remote_src: yes
+- name: Create consul directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ consul_user }}"
+    group: "{{ consul_user }}"
+  with_items:
+    - "{{ consul_run }}"
+    - "{{ consul_d }}"
+    - "{{ consul_opt }}"
+- name: Setup consul config
+  template:
+    src: config.json
+    dest: /etc/consul.d/config.json
+- name: Configure consul service
+  copy:
+    src: consul.service
+    dest: /etc/systemd/system
+- name: Forward tcp port 53 to 8600
+  iptables:
+    table: nat
+    chain: PREROUTING
+    in_interface: eth0
+    protocol: tcp
+    match: tcp
+    destination_port: 53
+    jump: REDIRECT
+    to_ports: 8600
+    comment: Redirect dns traffic to port 8600
+  become: yes
+- name: Forward udp port 53 to 8600
+  iptables:
+    table: nat
+    chain: PREROUTING
+    in_interface: eth0
+    protocol: udp
+    match: udp
+    destination_port: 53
+    jump: REDIRECT
+    to_ports: 8600
+    comment: Redirect dns traffic to port 8600
+  become: yes
+- name: daemon reload
+  systemd:
+    daemon-reload: yes
+- name: Enable consul service
+  systemd:
+    name: consul.service
+    enabled: yes
+- name: Start consul service
+  systemd:
+    name: consul.service
+    state: started
+
+
+
