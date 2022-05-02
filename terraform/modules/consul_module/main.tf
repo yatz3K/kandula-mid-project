@@ -7,7 +7,10 @@ resource "aws_instance" "consul_server" {
     associate_public_ip_address = true
     vpc_security_group_ids = [aws_security_group.consul_server_access.id]
     iam_instance_profile = var.iam_role
-    #user_data = file("ansible_module/ansible_server_userdata.tpl")
+    user_data = <<EOF
+                  #!/bin/bash
+                  sudo hostnamectl set-hostname server-${count.index+1}
+                  EOF
   
   root_block_device {
     encrypted = false

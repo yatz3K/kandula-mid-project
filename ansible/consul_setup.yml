@@ -1,0 +1,9 @@
+---
+
+- name: Installing Consul server
+  hosts: _Consul
+  become: yes
+  remote_user: ubuntu
+
+  roles:
+   - consul-server
