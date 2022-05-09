@@ -12,11 +12,13 @@ variable "vpc_id" {
 
 variable "public_subnets_id" {}
 
+variable "private_subnets_id" {}
+
 variable "consul_key" {}
 
 variable "iam_role" {}
 
-variable "my_ip" {}
+#variable "my_ip" {}
 
 variable "num_consul_server" {
   default = 3
