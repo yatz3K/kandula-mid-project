@@ -3,7 +3,7 @@ resource "aws_lb" "consul_ui" {
   internal = false
   load_balancer_type = "application"
   subnets = var.public_subnets_id
-  #security_groups = [aws.security_groups.cons]
+  security_groups = [aws.security_group.alb_consul_server.id]
   
   tags = {
     "Name" = "kandula-consul-alb"
