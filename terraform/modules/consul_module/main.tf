@@ -3,8 +3,7 @@ resource "aws_instance" "consul_server" {
     ami = var.consul_ami
     instance_type = var.consul_instance_type
     key_name = var.consul_key
-    subnet_id = element(var.public_subnets_id, count.index)
-    associate_public_ip_address = true
+    subnet_id = element(var.private_subnets_id, count.index)
     vpc_security_group_ids = [aws_security_group.consul_server_access.id]
     iam_instance_profile = var.iam_role
     user_data = <<EOF
@@ -50,7 +49,7 @@ resource "aws_security_group_rule" "consul_UI_access" {
   protocol = "tcp"
   type = "ingress"
   security_group_id = aws_security_group.consul_server_access.id
-  cidr_blocks = var.my_ip
+  cidr_blocks = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "outbound_anywhere" {
