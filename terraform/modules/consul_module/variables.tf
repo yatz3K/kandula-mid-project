@@ -18,8 +18,6 @@ variable "consul_key" {}
 
 variable "iam_role" {}
 
-#variable "my_ip" {}
-
 variable "num_consul_server" {
   default = 3
 }

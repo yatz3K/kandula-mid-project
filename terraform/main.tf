@@ -31,7 +31,6 @@ module "consul_server" {
   vpc_id = module.kandula_vpc.vpc_id
   private_subnets_id = module.kandula_vpc.private_subnets_id
   public_subnets_id = module.kandula_vpc.public_subnets_id
-  #my_ip = ["${chomp(data.http.myip.body)}/32"]
   iam_role = aws_iam_instance_profile.consul-join.name
   ansible_security_group = module.ansible_server.ansible_security_group_id
   depends_on = [module.ansible_server]

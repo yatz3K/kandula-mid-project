@@ -4,7 +4,6 @@ resource "aws_instance" "consul_server" {
     instance_type = var.consul_instance_type
     key_name = var.consul_key
     subnet_id = element(var.private_subnets_id, count.index)
-    #associate_public_ip_address = true
     vpc_security_group_ids = [aws_security_group.consul_server_access.id]
     iam_instance_profile = var.iam_role
     user_data = <<EOF
