@@ -3,7 +3,7 @@ resource "aws_lb" "consul_ui" {
   internal = false
   load_balancer_type = "application"
   subnets = var.public_subnets_id
-  security_groups = [aws.security_group.alb_consul_server.id]
+  security_groups = [aws_security_group.alb_consul_server.id]
   
   tags = {
     "Name" = "kandula-consul-alb"
@@ -29,7 +29,7 @@ resource "aws_lb_target_group" "consul_ui" {
 
   health_check {
     enabled = true
-    path = "/ui"
+    path = "/ui/kandula-mid-project"
   }
 
   tags = {
@@ -52,7 +52,7 @@ resource "aws_security_group" "alb_consul_server" {
   }
 }
 
-resource "aws_security_group_rule" "8500_from_anywhere" {
+resource "aws_security_group_rule" "ui_from_anywhere" {
   description = "access to 8500 consul ui fron anywhere"
   type = "ingress"
   from_port = 8500
@@ -62,11 +62,12 @@ resource "aws_security_group_rule" "8500_from_anywhere" {
   security_group_id = aws_security_group.alb_consul_server.id
 }
 
-resource "aws_security_group_rule" "outbound_anywhere" {
+resource "aws_security_group_rule" "lb_outbound_anywhere" {
   description = "allow outbound anywhere"
   type = "egress"
   from_port = 0
   to_port = 0
   protocol = "-1"
   cidr_blocks = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.alb_consul_server.id
 }
