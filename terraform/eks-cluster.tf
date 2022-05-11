@@ -3,7 +3,7 @@ module "eks" {
   version         = "18.6.1"
   cluster_name    = local.cluster_name
   cluster_version = var.kubernetes_version
-  subnet_ids         = module.kandula_vpc.public_subnets_id
+  subnet_ids         = module.kandula_vpc.private_subnets_id
 
   enable_irsa = true
   
