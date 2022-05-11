@@ -31,3 +31,13 @@ variable "private_key_file_name" {
   type = string
   default = "ec2_key_kandula.pem"
 }
+
+variable "kubernetes_version" {
+  default = 1.21
+  description = "kubernetes version"
+}
+
+locals {
+  k8s_service_account_namespace = "default"
+  k8s_service_account_name      = "opsschool-sa"
+}
